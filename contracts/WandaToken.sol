@@ -15,6 +15,12 @@ contract WandaToken {
 
     uint256 public totalSupply;
 
+    event Transfer(
+        address indexed _from,
+        address indexed _to,
+        uint256 _value
+    );
+
     mapping(address => uint256) public balanceOf;
 
     constructor (uint256 _initialSupply) public {
@@ -28,9 +34,15 @@ contract WandaToken {
     function transfer(address _to, uint256 _value) public returns (bool success) {
         // Exception if account doesn't have enough
         require(balanceOf[msg.sender] >= _value);
-        // Return boolean
-        // Transfer event
+        // Transfer balance
+        balanceOf[msg.sender] -= _value;
+        balanceOf[_to] += _value;
 
+        // Transfer event
+        emit Transfer(msg.sender, _to, _value);
+
+        // Return boolean
+        return true;
     }
 }
 
